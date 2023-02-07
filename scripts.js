@@ -18,8 +18,8 @@ const musiclist = [
 
 ];
 //sources
-const szerzo = document.querySelector('h2');
-const title = document.querySelector('h1');
+const szerzo = document.querySelector('.content h2');
+const title = document.querySelector('.content h1');
 const zene = document.querySelector('.zene');
 const slider = document.querySelector('.slider');
 const pausebutton = document.querySelector('.pause');
@@ -53,6 +53,7 @@ function zeneelem(){
 szerzo.innerHTML = musiclist[el].szerzo;
 title.innerHTML = musiclist[el].name;
 zene.src = musiclist[el].hang;
+
 
 if (el == musiclist.length - 1) {
 forward.classList.remove('available')
@@ -148,3 +149,149 @@ slider.addEventListener('change', function () {
     currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
     zene.currentTime = slider.value;
 });
+
+
+
+
+
+//menu
+const menu = document.querySelector('.menu');
+const menuButton = document.querySelector('.menu button');
+const menuZeneLista = document.querySelector('.menu-zenelista');
+
+menuButton.addEventListener('click', () => {
+if (menu.classList.contains('menu-open'))
+{
+menu.classList.remove('menu-open');
+menu.classList.add('menu-closed');
+menuZeneLista.classList.remove('menu-open');
+menuZeneLista.classList.add('menu-closed');
+}else {
+    menu.classList.add('menu-open');
+    menu.classList.remove('menu-closed');
+    menuZeneLista.classList.add('menu-open')
+    menuZeneLista.classList.remove('menu-closed');
+    refreshmusic();
+}
+});
+
+const new_music = document.querySelector('.new-music button');
+const new_music_input = document.querySelector('.new-music input');
+
+new_music.addEventListener('click', () => {
+    new_music_input.click();
+});
+new_music_input.addEventListener('change', () => {
+    let reader = new FileReader();
+    //console.log(new_music_input.files[0].name);
+    let splited_musicname = new_music_input.files[0].name.split('-');
+    reader.readAsDataURL(new_music_input.files[0]);
+    let new_Music_elem = {};
+    reader.addEventListener('load', () => {
+        if (splited_musicname.length == 2){
+            new_Music_elem = {
+            hang: reader.result,
+            name: splited_musicname[1],
+            szerzo: splited_musicname[0],
+        }}else {
+            new_Music_elem = {
+            hang: reader.result,
+            name: new_music_input.files[0].name,
+            szerzo: 'Ismeretlen',
+        }
+        }
+        musiclist.push(new_Music_elem);
+        console.log(musiclist);
+        refreshmusic()
+    });
+
+
+    
+});
+function refreshmusic() {
+
+
+const zenek = document.querySelector('.zenek');
+zenek.innerHTML = "";
+
+musiclist.forEach(element => {
+
+    
+    //alapja az elemnek
+    const zene_elem = document.createElement('div');
+    zene_elem.classList.add('menu-zene-elem');
+    zenek.appendChild(zene_elem);
+
+    //display
+    const music_display = document.createElement('div');
+    music_display.classList.add('music-display');
+
+    const szerzo_elem = document.createElement('h2');
+    const zenecim_elem = document.createElement('h2');
+    szerzo_elem.innerHTML = element.szerzo +'&nbsp - &nbsp';
+    zenecim_elem.innerHTML = element.name;
+    szerzo_elem.setAttribute('id', 'szerzo');
+    zenecim_elem.setAttribute('id', 'zene-cim');
+    music_display.appendChild(szerzo_elem);
+    music_display.appendChild(zenecim_elem);
+    zene_elem.appendChild(music_display);
+    
+    //actions
+    const music_actions = document.createElement('div');
+    music_actions.classList.add('music-actions');
+    
+    const music_playbutton = document.createElement('button');
+    music_playbutton.setAttribute('id', 'play');
+    if (musiclist.indexOf(element) == el && !zene.paused) {
+    music_playbutton.innerHTML = `<i class="bi bi-pause-fill"></i>`
+    }else if (musiclist.indexOf(element) == el && zene.paused)
+    {
+        music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`
+    }else {
+        music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`
+    }
+
+    const morebutton = document.createElement('button');
+    morebutton.setAttribute('id', 'more');
+
+
+    morebutton.innerHTML = `<i class="bi bi-three-dots"></i>`
+
+    music_actions.appendChild(music_playbutton);
+    music_actions.appendChild(morebutton);
+    zene_elem.appendChild(music_actions);
+
+    //current music
+
+    if (musiclist.indexOf(element) == el) {
+        zene_elem.classList.add('currentzene');
+    }
+
+    //play button
+
+
+    music_playbutton.addEventListener('click', () => {
+
+    pause();
+    el = musiclist.indexOf(element);
+    
+    musiclist.indexOf(element) == el;
+        
+    if (music_playbutton.innerHTML == `<i class="bi bi-play-fill"></i>`) {
+    zeneelem();
+    resume();
+    music_playbutton.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+    }
+    else {
+    pause();
+    music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`;
+    }
+
+    refreshmusic();
+    });
+
+});
+}
+refreshmusic()
+
+

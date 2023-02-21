@@ -7,11 +7,652 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href='https://css.gg/menu-right-alt.css' rel='stylesheet'>
     <link rel="icon" href="media/icon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <title>Music website</title>
 </head>
+<style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Ubuntu:wght@400;500;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: ubuntu;
+}
+
+body {
+    background: linear-gradient( var(--lightpink), var(--pink)) fixed;
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+}
+:root{
+    --lightpink: #FFE7E9;
+    --pink: #EE82EE;
+    --darkerpink: #FF69B4;
+    --darkerlightpink: #ffc0cb;
+    --orange: #ffa347;
+    --red: #e71837
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+
+}
+.wrapper {
+    background: url('media/background.jpg');
+    background-size: cover;
+    background-position: center center;
+    width: 70vw;
+    height: 100vh;
+    text-align: center;
+    padding: 4% 0;
+    border-radius: 15px;
+    position: relative;
+
+}
+.content img { 
+    width: 35vh;
+    height: 35vh;
+    border-radius: 20%;
+    box-shadow: 3px 3px 40px rgba(0, 0, 0, 0.384);
+    margin-bottom: 5vh;
+}
+.buttons{
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+.buttons button {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: none;
+    font-size: 2rem;
+    box-shadow: 3px 3px 40px rgba(0, 0, 0, 0.785);
+    cursor: pointer;
+    transition: all 0.2s;
+    align-items: center;
+    margin-top: 2rem;
+}
+.back, .forward{
+    color: rgba(0, 0, 0, 0.693);
+    opacity: 80%;
+}
+.available {
+    color: var(--pink);
+    opacity: 100%;
+}
+.buttons button:nth-child(2) {
+    width: 5rem;
+    height: 5rem;
+    margin-top: 1.5rem;
+    font-size: 3rem;
+    background-color: var(--darkerlightpink);
+    opacity: 100%;
+    color: var(--pink);
+}
+
+.actions input {
+
+    width: 80%;
+    background-color: var(--pink);
+    border: 3px solid var(--lightpink);
+    border-radius: 1rem;
+    height: 1rem;
+
+}
+.actions input::-webkit-slider-thumb {
+    appearance: none;
+    background-color: rgb(241, 70, 18);
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    border: 5px solid var(--lightpink);
+    cursor: pointer;
+}
+
+.available:hover {
+    background-color: var(--pink);
+    color: var(--lightpink);
+}
+h3{
+    margin:5vh 0 .5rem 0;
+    font-family: ubuntu;
+    font-weight: 500;
+}
+h1, h2 {
+    font-family: ubuntu;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+}
+.menu-zene-elem input {
+    background: none;
+    border: 0px transparent;
+    font-weight: 700;
+    letter-spacing: 1.25px;
+    font-size: 1.1rem;
+    outline: none;
+
+    
+}
+.menu-zene-elem input:not([readonly]):focus{
+color:#faff9f;
+
+}
+.menu-zene-elem input{
+
+}
+h1 {
+    overflow: auto;
+    height: 12vh;
+}
+*::-webkit-scrollbar{
+display: none;
+}
+
+
+.zene {
+    display: none;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 3rem;
+}
+
+
+.menu {
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right:0;
+    background-image:linear-gradient(to right bottom, var(--darkerpink), var(--lightpink));
+    opacity: 90%;
+    box-shadow: -3px 1px 40px 1px rgba(0, 0, 0, 0.426) ;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+
+}
+
+.menubutton {
+    padding: 0.5rem 4rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border: none;
+    background-image:linear-gradient(to right bottom, #CF9FFF, #CCCCFF);
+    box-shadow: 3px 1px 40px 1px rgba(0, 0, 0, 0.52) ;
+    cursor: pointer;
+}
+.menubutton i {
+    font-size: 2rem;
+}
+
+
+
+
+
+.menu-open {
+    animation-name: menuanimacio-open;
+    animation-duration: 0.6s;
+}
+.menu-closed{
+    
+    animation-name: menuanimacio-close;
+    animation-duration: 0.6s;
+}
+.menu-zenelista{
+    height: 0vh;
+    overflow-y: auto;
+
+    }
+.menu-zenelista.menu-closed{
+height: 0vh;
+}
+.menu-zenelista.menu-open{
+    height: 64.4vh;
+    }
+
+.menu-closed::-webkit-scrollbar {
+    display: none;
+}
+.menu-open::-webkit-scrollbar {
+    display: none;
+}
+
+@keyframes menuanimacio-open{
+    0%{
+        height: 7.8vh;
+    }
+    100%{
+        height: 72vh;
+    }
+}
+@keyframes menuanimacio-close{
+    0%{
+        height: 72vh;
+    }
+    100%{
+        height: 7.8vh;
+    }
+
+}
+.menu-zene-elem {
+    position: relative;
+    margin: 2.5vh 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    background-image:linear-gradient(to right bottom, #CF9FFF, var(--darkerpink));
+    opacity: 100%;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    height: 12vh;
+    align-items: center;
+    padding: 0 0.5rem;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.355) ;
+    overflow: hidden;
+    text-align: center;
+}
+.music-display{
+    display: flex;
+
+    white-space: nowrap;
+    margin-right: 2rem;
+    overflow: auto;
+    flex-wrap: wrap;
+    width: 60%;
+    transition: 0.5s ease-in-out;
+    z-index: 1;
+}
+.music-display::-webkit-scrollbar {
+    display: none;
+}
+
+.music-actions{
+    display: flex;
+    flex: 1 1 0% ;
+    justify-content: end;
+    gap: 1rem;
+    width: 100%;
+    position: absolute;
+    transition: 0.5s ease-in-out;
+    z-index: 0;
+}
+#play {
+    border: none;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    text-align: center;
+    background-image:linear-gradient(to right bottom, #CF9FFF, #CCCCFF);
+    cursor: pointer;
+    min-width: 5vw;
+
+}
+#play i {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #EE82EE;
+
+}
+#more {
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 2.5rem;
+    margin-right: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    width: 8vw;
+
+}
+
+
+.menu-zene-elem-edit {
+    background-color: rgba(0, 0, 0, 0.829);
+    width: 150%;
+    border-radius: 0.5rem;
+    z-index: 1;
+    height: 100%;
+    position: absolute;
+    align-items: center;
+    display: flex;
+    transform: translateX(67%); 
+    transition: 0.5s ease-in-out;
+    
+
+}
+.menu-zene-elem-edit-display{
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+    align-items: center;
+    width: 61%;
+    margin-left: 1.5rem;
+
+}
+#more i::before {
+    box-sizing: unset;
+    transition: 0.5s ease-in-out;
+
+}
+
+.menu-zene-elem-edit i {
+    
+font-size: 2.5rem;
+height: 100%;
+width: 100%;
+margin-top: 3vh;
+text-align: center;
+font-style: normal;   
+}
+.menu-zene-elem-edit i span{
+font-size: 1.15rem;
+}
+
+.menu-zene-elem-edit i:nth-child(1) {
+    color: #f00404;
+
+    }
+.menu-zene-elem-edit i:nth-child(2) {
+    color: #ffa347
+    }
+.menu-zene-elem-edit i:nth-child(3) {
+    color: rgb(255, 0, 89)
+    }
+.menu-zene-elem-edit i:nth-child(4) {
+color: #04ECF0;
+margin: 6vh 1.5rem 0 0;
+    }
+.menu-zene-elem-edit i:nth-child(1):hover {
+    color: #fa3636be;
+    transition: 0.1s;
+}
+.menu-zene-elem-edit i:nth-child(2):hover {
+    color: #ffa347a5;
+    transition: 0.1s;
+    }
+.menu-zene-elem-edit i:nth-child(3):hover {
+    color: rgba(255, 14, 103, 0.642);
+    transition: 0.2s;
+    }
+.menu-zene-elem-edit i:nth-child(4):hover {
+    color: #04ecf09a;
+    transition: 0.1s;
+    }
+
+.menu-zene-elem-edit-open {
+     transform: translateX(3%);
+
+}
+.menu-display-open {
+    transform: translateX(-130%);
+}
+.menu-action-open {
+    transform: translateX(-91%);
+}
+.rotate-dots::before {
+    transform: rotate(90deg);
+}
+
+
+
+.deleteanimation {
+    animation-name: deleteAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    
+}
+.deleteAnimationZeneElem {
+    animation-name: deleteAnimationZeneElem;
+    animation-duration: 1s;
+}
+
+
+@keyframes deleteAnimation{
+    0%{
+        color: #f00404;
+        font-size: 2.5rem;
+    }
+    50%{
+        font-size: 3rem;
+        color: #fe575799;
+    }
+    100%{
+        color: #f00404;
+        font-size: 2.5rem;
+    }
+}
+@keyframes deleteAnimationZeneElem{
+    0%{
+        height: 12vh;
+    }
+    100%{
+        height: 0;
+        opacity: 0;
+    }
+}
+
+.heartAnimation {
+    animation-name: heartAnimation;
+    animation-duration: 0.5s;
+
+}
+@keyframes heartAnimation{
+    0%{
+        color: rgb(255, 0, 89);
+        font-size: 2.5rem;
+    }
+    50%{
+        font-size: 3rem;
+        color: rgb(255, 0, 89);
+    }
+    100%{
+        font-size: 2.5rem;
+        color: rgb(255, 0, 89);
+    }
+}
+
+
+
+.moveable {
+    animation-name: moveable;
+    animation-duration: 0.1s;
+    animation-iteration-count: infinite;
+}
+@keyframes moveable{
+    0%{
+        transform: translateX(0);
+    }
+    25%{
+        transform: translateX(1px);
+    }
+    50%{
+        transform: translateX(0);
+    }
+    75%{
+        transform: translateX(-1px);
+    }
+}
+
+.edit_sorrend_done {
+    width: 50vw;
+    min-width: 10rem;
+    height: 8vh;
+    margin: 2rem 0 1rem 0;
+    align-items: center;
+    text-align: center;
+    background-color: #8604f064;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px black;
+    font-weight: 900;
+    outline: none;
+    border: none;
+    font-size: 2rem;
+    color: rgb(195, 0, 255);
+    display: none;
+    text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+    1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+}
+
+
+
+
+
+
+
+
+
+.new-music, .new-music-2{
+    display: flex;
+    justify-content: center;;
+}
+.new-music button, .new-music-2 button{
+margin: 4vh 1rem ;
+background-image:linear-gradient(to right bottom, var(--orange), var(--red));
+margin-right: 1rem;
+display: flex;
+height: 10vh;
+min-width: 65vw;
+outline: none;
+border: none;
+border-radius: 3rem;
+font-size: 2rem;
+font-family: Ubuntu;
+font-weight: 500;
+padding: 0rem 1rem;
+white-space: nowrap;
+flex-wrap: wrap;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.355) ;
+}
+.new-music i {
+    font-weight: 700;
+    font-size: 3rem;
+}
+.new-music button span {
+    margin-right: 1rem;
+
+}
+
+
+
+.new-music input {
+    display: none;
+}
+.currentzene {
+    box-shadow: 0 0 30px 1px rgb(226, 57, 5) inset;
+}
+h6 {
+    text-align: center;
+    align-items: center;
+    font-size: 1.3rem;
+    font-family: ubuntu;
+    color: rgba(0, 0, 0, 0.642);
+}
+.wrapper .div {
+    padding-top: 20vh;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+
+#edit-action {
+    cursor: pointer;
+    display: none;
+    justify-content: end;
+}
+#edit-action button {
+
+    outline: none;
+    height: 100%;
+    border-radius: 50%;
+    text-align: center;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 0.5rem;
+    background: transparent;
+    font-size: 2.5rem;
+    color: red;
+    cursor: pointer;
+
+}
+.edit-no {border: 2px solid red}
+.edit-yes i {
+    color: green;
+    font-size: 2.2rem;
+}
+.edit-yes {border: 2px solid green}
+
+.reset i {
+    color: rgb(30, 30, 30);
+    font-size: 2.2rem;
+}
+.reset {border: none}
+
+@media (max-width: 680px) {
+    .wrapper {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+
+    }
+    .container {
+    margin: 0;
+    height: 100%;
+    }
+    .new-music button span{
+    font-size: 1.5rem;
+    }
+}
+@media (min-width: 680px) {
+    #more {width: 5vw;}
+}
+@media (max-width:400px){
+    .menu-zene-elem {
+        margin: 2.5vh 0;
+    }
+    .menu-zene-elem-edit i {
+        font-size: 3rem;
+    }
+    .menu-zene-elem-edit i span{
+        display: none;
+    }
+    .menu-zene-elem-edit i {
+        margin-top: 5vh;
+    }
+    .menu-zene-elem-edit i:nth-child(4) {
+        color: #04ECF0;
+        margin: 4vh 2rem 0 0;
+            }
+}
+@media (max-width:307px) {
+    .new-music button span {
+        display: none;
+    }
+}
+
+
+
+</style>
 <body>
     <div class="container">
         <div class="wrapper">
+            <div class="div"></div>
             <div class="content">
 
                 <img src="media/music.jpg" class="pic">
@@ -27,19 +668,26 @@
                 <button class="pause"><i class="bi bi-play-fill"></i></button>
                 <button class="forward"><i class="bi bi-skip-end-fill"></i></button>
                 
-                </div>
             </div>
+        </div>
                 <div class="menu">
-                    <button class="menubutton"><i class="gg-menu-right-alt"></i></button>
+                    <button class="menubutton"><i class="bi bi-music-note-list"></i></button>
 
 
                     <div class="menu-zenelista">
+                        
                         <div class="new-music">
-                            <input type="file" accept="audio/mp3"> 
+                            <form action="uploadFile.php" method="post" enctype="multipart/form-data">
+                            <input type="file" accept="audio/mp3" name="FileInput" id="FileInput"> 
+                            <input type="submit" value="file feltöltése" class="submit">
+    
+                            </form>
                             <button><span>Zene Hozzáadás  </span><i class="bi bi-cloud-plus"></i></button>
+
                         </div>
+                        <button class="edit_sorrend_done" onclick="edit_sorrend_done_save()"> Mentés</button>
                             <div class="zenek">
-                        <!--
+                        
                         <div class="menu-zene-elem currentzene">
                             
                             <div class="music-display">
@@ -49,14 +697,671 @@
                             <div class="music-actions">
                                 <button id="play"><i class="bi bi-play-fill"></i></button> <button id="more"><i class="bi bi-three-dots"></i></button>
                             </div>
+                            <div id="edit-action">
+                                <button class="reset"><i class="bi bi-arrow-counterclockwise"></i></button><button class="edit-no"><i class="bi bi-x"></i></button> <button class="edit-yes"><i class="bi bi-check-lg"></i></button>
+                            </div>
                         </div>  
-                   -->
+                   
                         </div>
+
                     </div>
                 </div>
         </div>
 
     </div>
 </body>
-<script src="scripts.js"></script>
+<script>
+    //Zenék listája 
+    
+    musiclist = JSON.parse(localStorage.getItem('musiclist')) || [];
+
+
+    
+    console.log(musiclist);
+    //sources
+    const szerzo = document.querySelector('.content h2');
+    const title = document.querySelector('.content h1');
+    const zene = document.querySelector('.zene');
+    const slider = document.querySelector('.slider');
+    const pausebutton = document.querySelector('.pause');
+    const pic = document.querySelector('.pic');
+    const currentido = document.querySelector('.currentido');
+    
+    const back = document.querySelector('.back');
+    const forward = document.querySelector('.forward');
+    let el = 0
+    let deletecounter = 0
+    let o = 0
+    //current zene load
+    zene.onloadedmetadata = function () {
+        slider.max = zene.duration;
+        slider.value = zene.currentTime;
+        durationMinutes = Math.floor(zene.duration / 60);
+        durationSeconds = Math.floor(zene.duration - durationMinutes * 60);
+        if(durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
+        
+        document.querySelector('.maxido').innerHTML = durationMinutes + ":" + durationSeconds;
+        currentido.innerHTML= `0:00`;
+    }
+    
+    
+    
+    
+    //lépkedés + maxduration
+    
+    let durationMinutes = 0;
+    let durationSeconds = 0;
+    
+    function zeneelem(){
+    (musiclist[el]?.modositottSzerzo !== undefined) ? szerzo.innerHTML = musiclist[el].modositottSzerzo : szerzo.innerHTML = musiclist[el]?.szerzo;
+    (musiclist[el]?.modositottSzerzo !== undefined) ? title.innerHTML = musiclist[el].modositottName : title.innerHTML = musiclist[el]?.name;
+    zene.src = musiclist[el]?.hang;
+    if (musiclist[el]?.tetszik == true){
+        pic.style = "box-shadow: 3px 3px 40px rgb(255, 0, 89)"
+    }
+    else pic.style = "box-shadow: 3px 3px 40px rgba(0, 0, 0, 0.684)"
+    
+    if (el == musiclist.length - 1) {
+    forward.classList.remove('available')
+    }
+    else{
+        forward.classList.add('available')
+    }
+    if (el == 0) {
+        back.classList.remove('available')
+        }
+        else {
+            back.classList.add('available')
+        }
+    }
+    zeneelem()
+    back.addEventListener('click', () => {
+    if (el > 0) {
+        el--;
+        zeneelem()
+        pause();
+        resume();
+        currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
+    }
+    });
+    forward.addEventListener('click', () => {
+        if (el < musiclist.length - 1) {
+            el++;
+            zeneelem();
+            pause();
+            resume();
+            currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
+        }
+        });
+    
+    
+    
+    //megállitás + ido
+    let currentSeconds = 0;
+    let currentMinutes = 0;
+    var sor
+    
+    
+    function pause(){
+        zene.pause();
+        pausebutton.innerHTML = `<i class="bi bi-play-fill"></i>`;
+        pic.src = 'media/music.jpg';
+        if (sor >= 1) {
+        clearInterval(sor);
+        }
+    }
+    function resume(){
+        zene.play();
+        pausebutton.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+        pic.src = 'media/music.gif';
+            sor = setInterval(() => {
+            slider.value = zene.currentTime;
+            //console.log(Math.floor(zene.currentTime));
+            //timer
+            currentMinutes = Math.floor(zene.currentTime / 60);
+            currentSeconds = Math.floor(zene.currentTime - currentMinutes * 60);
+            if(currentSeconds < 10) {currentSeconds = "0" + currentSeconds; }
+            currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
+            
+            if (Math.floor(zene.currentTime) == Math.floor(zene.duration)) {
+                if (el < musiclist.length - 1) {
+                    el++;
+                    zeneelem();
+                    pause();
+                    resume();
+                    refreshmusic()
+                    currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
+                }else {
+                    pause();
+                }
+            }
+        }, 1000);
+    }
+    
+    pausebutton.addEventListener('click', function () {
+        if (!zene.paused) {
+            pause()
+        }
+        else {
+            resume();
+        }
+    });
+    
+    
+    //slider
+    slider.addEventListener('change', function () {
+        currentMinutes = Math.floor(slider.value / 60);
+        currentSeconds = Math.floor(slider.value - currentMinutes * 60);
+        if(currentSeconds < 10) {currentSeconds = "0" + currentSeconds; }
+        currentido.innerHTML= `${currentMinutes}:${currentSeconds}`;
+        zene.currentTime = slider.value;
+    });
+    
+    
+    
+    
+    
+    //menu
+    const menu = document.querySelector('.menu');
+    const menuButton = document.querySelector('.menu button');
+    const menuZeneLista = document.querySelector('.menu-zenelista');
+    
+    menuButton.addEventListener('click', () => {
+    if (menu.classList.contains('menu-open'))
+    {
+    menu.classList.remove('menu-open');
+    menu.classList.add('menu-closed');
+    menuZeneLista.classList.remove('menu-open');
+    menuZeneLista.classList.add('menu-closed');
+    }else {
+        menu.classList.add('menu-open');
+        menu.classList.remove('menu-closed');
+        menuZeneLista.classList.add('menu-open')
+        menuZeneLista.classList.remove('menu-closed');
+        refreshmusic();
+    }
+    });
+    
+    const new_music = document.querySelector('.new-music button');
+    const new_music_input = document.querySelector('.new-music input');
+    
+    new_music.addEventListener('click', () => {
+        new_music_input.click();
+        pause();
+    });
+    new_music_input.addEventListener('change', () => {
+        let splited_musicname = new_music_input.files[0].name.split('-');
+        let new_Music_elem = {};
+        if (splited_musicname.length == 2){
+            new_Music_elem = {
+            helyezet: musiclist.length + 1,
+            szerzo: splited_musicname[0],
+            name: splited_musicname[1],
+            hang: 'media/musics/' + new_music_input.files[0].name,
+            tetszik: false,
+            modositottSzerzo: undefined,
+            modositottName: undefined,
+
+        }
+        }else {
+        new_Music_elem = {
+            helyezet: musiclist.length + 1,
+            szerzo: 'Ismeretlen',
+            name: new_music_input.files[0].name,
+            hang: 'media/musics/' + new_music_input.files[0].name,
+            tetszik: false,
+            modositottSzerzo: undefined,
+            modositottName: undefined,
+            }
+        }
+        musiclist.push(new_Music_elem);
+        console.log(musiclist);
+        refreshmusic()
+        zeneelem()
+        localStorage.setItem('musiclist', JSON.stringify(musiclist));
+        document.querySelector('.submit').click();
+
+    
+    });
+
+
+
+    function refreshmusic() {
+    const zenek = document.querySelector('.zenek');
+    zenek.innerHTML = "";
+    if (musiclist.length == null) {
+        zenek.innerHTML = "<h6>Nem adtál hozzá még egy zenét sem<h6>";
+        document.querySelector('.actions').style.display = 'none';
+        document.querySelector('.content').style.display = 'none';
+        document.querySelector('.wrapper .div').innerHTML = `<h6>Adj hozzá új zenét!<h6>`
+        const new_music_2 = document.createElement('div');
+        new_music_2.classList.add('new-music-2');
+        new_music_2.innerHTML =`<button><span>Zene Hozzáadás  </span><i class="bi bi-cloud-plus"></i></button>`
+        document.querySelector('.wrapper .div').appendChild(new_music_2);
+        new_music_2.addEventListener('click', () => {
+        new_music_input.click();
+        });
+        
+    }else{
+        document.querySelector('.actions').style.display = 'block';
+        document.querySelector('.content').style.display = 'block';
+        document.querySelector('.wrapper .div').innerHTML = "";
+        (musiclist[el]?.modositottSzerzo !== undefined) ? szerzo.innerHTML = musiclist[el].modositottSzerzo : szerzo.innerHTML = musiclist[el]?.szerzo;
+        (musiclist[el]?.modositottSzerzo !== undefined) ? title.innerHTML = musiclist[el].modositottName : title.innerHTML = musiclist[el]?.name;
+    }
+    
+    
+
+    musiclist.forEach(element => {
+
+        
+
+        
+        //alapja az elemnek
+        const zene_elem = document.createElement('div');
+        zene_elem.classList.add('menu-zene-elem','dragdisabled');
+        zenek.appendChild(zene_elem);
+    
+        //display
+        const music_display = document.createElement('div');
+        music_display.classList.add('music-display');
+    
+        const szerzo_elem = document.createElement('input');
+        const zenecim_elem = document.createElement('input');
+        (musiclist[musiclist.indexOf(element)].modositottSzerzo !== undefined) ? szerzo_elem.value = musiclist[musiclist.indexOf(element)].modositottSzerzo +' - ' : szerzo_elem.value = musiclist[musiclist.indexOf(element)]?.szerzo +' - ';
+        (musiclist[musiclist.indexOf(element)].modositottName !== undefined) ? zenecim_elem.value = musiclist[musiclist.indexOf(element)].modositottName : zenecim_elem.value = musiclist[musiclist.indexOf(element)]?.name.trim();
+        szerzo_elem.style.width = (szerzo_elem.value.length + 1) + "ch";
+        zenecim_elem.style.width = (zenecim_elem.value.length + 1) + "ch";
+        szerzo_elem.setAttribute('id', 'szerzo');
+        zenecim_elem.setAttribute('id', 'zene-cim');
+        szerzo_elem.setAttribute('readonly', 'true');
+        zenecim_elem.setAttribute('readonly', 'true');
+        music_display.appendChild(szerzo_elem);
+        music_display.appendChild(zenecim_elem);
+        zene_elem.appendChild(music_display);
+        
+        //actions
+        const music_actions = document.createElement('div');
+        music_actions.classList.add('music-actions');
+        
+        const music_playbutton = document.createElement('button');
+        music_playbutton.setAttribute('id', 'play');
+        if (musiclist.indexOf(element) == el && !zene.paused) {
+        music_playbutton.innerHTML = `<i class="bi bi-pause-fill"></i>`
+        }else if (musiclist.indexOf(element) == el && zene.paused)
+        {
+            music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`
+        }else {
+            music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`
+        }
+        //morebutton
+        const morebutton = document.createElement('button');
+        morebutton.setAttribute('id', 'more');
+        const morebuttondots = document.createElement('i');
+        morebuttondots.classList.add('bi','bi-three-dots');
+        morebutton.appendChild(morebuttondots);
+
+        //rename tick-x buttons
+        const edit_action = document.createElement('div');
+        edit_action.setAttribute('id', 'edit-action');
+        edit_action.style.display = 'none';
+
+        const reset_button = document.createElement('button');
+        reset_button.classList.add('reset');
+        reset_button.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
+        edit_action.appendChild(reset_button);
+
+        const edit_no_button = document.createElement('button');
+        edit_no_button.classList.add('edit-no')
+        edit_no_button.innerHTML = `<i class="bi bi-x"></i>`;
+        edit_action.appendChild(edit_no_button);
+
+        const edit_yes_button = document.createElement('button');
+        edit_yes_button.classList.add('edit-yes')
+        edit_yes_button.innerHTML = `<i class="bi bi-check-lg"></i>`;
+        edit_action.appendChild(edit_yes_button);
+
+
+        
+        music_actions.appendChild(music_playbutton);
+        music_actions.appendChild(morebutton);
+        zene_elem.appendChild(edit_action);
+        zene_elem.appendChild(music_actions);
+    
+        //menu-zene-elem-edit
+        const menu_zene_elem_edit = document.createElement('div');
+        menu_zene_elem_edit.classList.add('menu-zene-elem-edit');
+
+        const menu_zene_elem_edit_display = document.createElement('div');
+        menu_zene_elem_edit_display.classList.add('menu-zene-elem-edit-display');
+
+
+        const deleteicon = document.createElement('i');
+        deleteicon.classList.add('bi','bi-trash');
+        const deletespan = document.createElement('span');
+        deletespan.innerHTML = 'Törlés';
+
+        const editicon = document.createElement('i');
+        editicon.classList.add('bi','bi-pen');
+        const editspan = document.createElement('span');
+        editspan.innerHTML = 'Szerkesztés';
+
+        const likeicon = document.createElement('i');
+
+        likeicon.classList.add('bi','bi-suit-heart');
+        const likespan = document.createElement('span');
+        likespan.innerHTML = 'Tetszik';
+        
+        const dragicon = document.createElement('i');
+        dragicon.classList.add('bi','bi-chevron-expand');
+        
+
+        deleteicon.appendChild(document.createElement('br'));
+        editicon.appendChild(document.createElement('br'));
+        likeicon.appendChild(document.createElement('br'));
+
+        deleteicon.appendChild(deletespan);
+        editicon.appendChild(editspan);
+        likeicon.appendChild(likespan);
+
+        menu_zene_elem_edit_display.appendChild(deleteicon)
+        menu_zene_elem_edit_display.appendChild(editicon)
+        menu_zene_elem_edit_display.appendChild(likeicon)
+        menu_zene_elem_edit_display.appendChild(dragicon)
+
+        menu_zene_elem_edit.appendChild(menu_zene_elem_edit_display)
+        zene_elem.appendChild(menu_zene_elem_edit);
+        
+
+        //current music
+        
+        if (musiclist.indexOf(element) == el) {
+            zene_elem.classList.add('currentzene');
+        }
+    
+        //play button1*****************************************************
+        music_display.addEventListener('click', () => {
+            if (!zenek.classList.contains('moveable') && !(edit_action.style.display == 'flex')){
+        pause();
+        el = musiclist.indexOf(element);
+        musiclist.indexOf(element) == el;
+            
+        if (music_playbutton.innerHTML == `<i class="bi bi-play-fill"></i>` && !zene_elem.classList.contains('currentzene')) {
+        zeneelem();
+        resume();
+        music_playbutton.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+        }
+        else if (music_playbutton.innerHTML == `<i class="bi bi-play-fill"></i>` && zene_elem.classList.contains('currentzene')) {
+        resume();
+        }
+        else {
+        pause();
+        
+        music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`;
+        }
+    
+        if (document.querySelectorAll('.menu-zene-elem-edit-open').length !== 0) {
+            document.querySelector('.menu-zene-elem-edit-open').classList.remove('menu-zene-elem-edit-open')
+            document.querySelector('.menu-action-open').classList.remove('menu-action-open');
+            document.querySelector('.menu-display-open').classList.remove('menu-display-open');
+            document.querySelector('.rotate-dots').classList.remove('rotate-dots');
+        }else {
+            refreshmusic();
+        }
+        }
+        });
+
+
+        //play button2*****************************************************
+
+        music_playbutton.addEventListener('click', () => {
+            if (!zenek.classList.contains('moveable')){
+            pause();
+            el = musiclist.indexOf(element);
+            musiclist.indexOf(element) == el;
+                
+            if (music_playbutton.innerHTML == `<i class="bi bi-play-fill"></i>` && !zene_elem.classList.contains('currentzene')) {
+            zeneelem();
+            resume();
+            music_playbutton.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+            }
+            else if (music_playbutton.innerHTML == `<i class="bi bi-play-fill"></i>` && zene_elem.classList.contains('currentzene')) {
+            resume();
+            }
+            else {
+            pause();
+            
+            music_playbutton.innerHTML = `<i class="bi bi-play-fill"></i>`;
+            }
+            if (document.querySelectorAll('.menu-zene-elem-edit-open').length !== 0) {
+                document.querySelector('.menu-zene-elem-edit-open').classList.remove('menu-zene-elem-edit-open')
+                document.querySelector('.menu-action-open').classList.remove('menu-action-open');
+                document.querySelector('.menu-display-open').classList.remove('menu-display-open');
+                document.querySelector('.rotate-dots').classList.remove('rotate-dots');
+            }else {
+                refreshmusic();
+            }
+
+
+            }
+            });
+
+        //more button*****************************************************
+
+        morebutton.addEventListener('click', (e) => {
+            if (!zenek.classList.contains('moveable')){
+            if (musiclist[musiclist.indexOf(element)]?.tetszik) {
+                likeicon.classList.add('bi-suit-heart-fill')
+                likeicon.classList.remove('bi-suit-heart');
+            }
+        if (!menu_zene_elem_edit.classList.contains('menu-zene-elem-edit-open'))
+        {
+            if (document.querySelectorAll('.menu-zene-elem-edit-open').length !== 0) {
+                document.querySelector('.menu-zene-elem-edit-open').classList.remove('menu-zene-elem-edit-open')
+                document.querySelector('.menu-action-open').classList.remove('menu-action-open');
+                document.querySelector('.menu-display-open').classList.remove('menu-display-open');
+                document.querySelector('.rotate-dots').classList.remove('rotate-dots');
+                deletecounter = 0;
+                deleteicon.classList.remove('deleteanimation');
+            }
+
+            menu_zene_elem_edit.classList.add('menu-zene-elem-edit-open');
+            music_actions.classList.add('menu-action-open');
+            music_display.classList.add('menu-display-open');
+            morebuttondots.classList.add('rotate-dots');
+    
+
+
+        }else {
+                menu_zene_elem_edit.classList.remove('menu-zene-elem-edit-open');
+                music_actions.classList.remove('menu-action-open');
+                music_display.classList.remove('menu-display-open');
+                morebuttondots.classList.remove('rotate-dots');
+                deletecounter = 0;
+                deleteicon.classList.remove('deleteanimation');
+        }
+        }
+        });
+
+
+
+        
+        deleteicon.addEventListener ('click', e =>{
+            if (deletecounter == 0) {
+                deletecounter++;
+                deleteicon.classList.add('deleteanimation');
+            }else{
+                zene_elem.classList.add('deleteAnimationZeneElem')
+                zene_elem.style = 'margin: 0 0.5rem';
+                setTimeout(() => {
+                musiclist = musiclist.filter(t => t != element);
+                localStorage.setItem('musiclist', JSON.stringify(musiclist));
+                deletecounter = 0;
+                zeneelem();
+                pause();
+                refreshmusic();
+                },1000)
+
+            }
+        });
+
+        editicon.addEventListener ('click', e =>{
+            document.querySelector('#edit-action').style.display = 'none'
+            document.querySelector('.music-actions').style.display = 'flex';
+            document.querySelectorAll('#szerzo').forEach(e => {e.setAttribute('readonly', 'true')})
+            document.querySelectorAll('#zene-cim').forEach(e => {e.setAttribute('readonly', 'true')})
+
+            menu_zene_elem_edit.classList.remove('menu-zene-elem-edit-open');
+            music_actions.classList.remove('menu-action-open');
+            music_display.classList.remove('menu-display-open');
+            morebuttondots.classList.remove('rotate-dots');
+            music_actions.style.display = 'none';
+            edit_action.style.display = 'flex';
+            szerzo_elem.focus();
+            szerzo_elem.removeAttribute('readonly');
+            zenecim_elem.removeAttribute('readonly');
+            szerzo_elem.value = szerzo_elem.value.substring(0, szerzo_elem.value.length - 3)
+            reset_button.style.display = 'none';
+            szerzo_elem.addEventListener('input', e => {
+                szerzo_elem.style.width = (szerzo_elem.value.length + 3) + "ch";
+                reset_button.style.display = 'block';
+            });
+            zenecim_elem.addEventListener('input', e => {
+                zenecim_elem.style.width = (zenecim_elem.value.length + 3) + "ch";
+                reset_button.style.display = 'block';
+            });
+            reset_button.addEventListener('click', e => {
+                szerzo_elem.value = element.szerzo
+                zenecim_elem.value = element.name.trim();
+                szerzo_elem.style.width = (szerzo_elem.value.length + 3) + "ch";
+                zenecim_elem.style.width = (zenecim_elem.value.length + 3) + "ch";
+                reset_button.style.display = 'none';
+
+            });
+            edit_no_button.addEventListener('click', e => {
+                refreshmusic();
+            });
+            edit_yes_button.addEventListener('click', e => {
+                console.log('hugy')
+                musiclist[musiclist.indexOf(element)].modositottSzerzo = szerzo_elem.value;
+                musiclist[musiclist.indexOf(element)].modositottName = zenecim_elem.value;
+                localStorage.setItem('musiclist', JSON.stringify(musiclist))
+                refreshmusic();
+
+            });
+        });
+
+        likeicon.addEventListener('click', e => {
+            if (musiclist[musiclist.indexOf(element)]?.tetszik)
+            {
+                likeicon.classList.remove('bi-suit-heart-fill');
+                likeicon.classList.add('bi-suit-heart');
+                musiclist[musiclist.indexOf(element)].tetszik = false;
+                likeicon.classList.remove('heartAnimation');
+            }else {
+                likeicon.classList.add('bi-suit-heart-fill');
+                likeicon.classList.remove('bi-suit-heart');
+                musiclist[musiclist.indexOf(element)].tetszik = true;
+                likeicon.classList.add('heartAnimation');
+            }
+            zeneelem()
+            localStorage.setItem('musiclist', JSON.stringify(musiclist))
+        });
+
+
+
+
+
+        dragicon.addEventListener('click', () => {
+
+            console.log('OWO');
+            menu_zene_elem_edit.classList.remove('menu-zene-elem-edit-open');
+            music_actions.classList.remove('menu-action-open');
+            music_display.classList.remove('menu-display-open');
+            morebuttondots.classList.remove('rotate-dots');
+            zenek.classList.add('moveable');
+            document.querySelector('.edit_sorrend_done').style.display = 'inline-block';
+            new_music.style.display = 'none';
+            let m = 1 // modositás
+            document.querySelectorAll('.menu-zene-elem').forEach(e => {
+            e.classList.remove('dragdisabled'); e.value = m; m++;
+            });
+
+            console.log(musiclist)
+            if (o == 0)
+            {
+                o = 1;
+
+                new Sortable(zenek, {
+                    animation: 350,
+                    filter: '.dragdisabled'
+                })
+
+
+            }
+        });
+
+    });
+}//refreshmusic(); vége
+    //************************************************************ */
+refreshmusic()
+//donebutton
+let newsorrend = [];
+function edit_sorrend_done_save(){
+
+    console.log('asd')
+    document.querySelector('.edit_sorrend_done').style.display = 'none';
+    new_music.style.display = 'flex';
+    document.querySelector('.zenek').classList.remove('moveable');
+
+
+    document.querySelectorAll('.menu-zene-elem').forEach(e => {
+    newsorrend.push(e.value);
+    //musiclist[n].helyezet = document.querySelectorAll('.menu-zene-elem')[n].value
+    //console.log(e.value)
+
+    });
+
+    let q = 1
+
+    newsorrend.forEach(n => {
+        musiclist[n - 1].helyezet = q
+        q++
+    })
+
+
+    newsorrend = [];
+    musiclist.sort((a, b) => a.helyezet - b.helyezet);
+    localStorage.setItem('musiclist', JSON.stringify(musiclist));
+    zeneelem();
+    refreshmusic();
+    
+}
+
+
+
+
+
+
+
+
+
+    //downmenu eazy
+    document.querySelector('.div').addEventListener('click', () => {
+    downmenu()});
+    document.querySelector('.content').addEventListener('click', () => {
+    downmenu()});
+    function downmenu(){
+        if (menu.classList.contains('menu-open'))
+        {
+        menu.classList.remove('menu-open');
+        menu.classList.add('menu-closed');
+        menuZeneLista.classList.remove('menu-open');
+        menuZeneLista.classList.add('menu-closed');
+        }
+    }
+
+
+
+</script><!---->
 </html>
